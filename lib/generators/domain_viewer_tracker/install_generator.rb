@@ -5,7 +5,6 @@ module DomainViewerTracker
     def install
       template "create_viewers.rb", "db/migrate/#{Time.now.strftime("%Y%m%d%H%M%d")}_create_viewers.rb"
       template "domain_viewer_tracker.rb", "config/initializers/domain_viewer_tracker.rb"
-      template "viewer.rb", "app/models/viewer.rb"
     end
   end
 end

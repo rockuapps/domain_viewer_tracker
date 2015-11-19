@@ -1,6 +1,15 @@
 require 'spec_helper'
 
 describe DomainViewerTracker do
+  let(:testModel) do
+    class TestModel
+      include DomainViewerTracker
+    end
+    allow_any_instance_of(TestModel).to receive(:cookies).and_return(test_cookie)
+    TestModel.new
+  end
+  let(:test_cookie) { ActionDispatch::Cookies::CookieJar.new(nil) }
+
   describe "#set_viewer_id" do
     subject { testModel.send(:set_viewer_id) }
 
@@ -57,5 +66,60 @@ describe DomainViewerTracker do
         end
       end
     end
+  end
+
+  describe "#store_viewer_id" do
+    subject { testModel.send(:store_viewer_id, user_id) }
+
+    context "cookie and user_id exist" do
+      let(:user_id) { 1 }
+      before do
+        test_cookie[:viewer_id] = "hoge"
+      end
+
+      it "Creates viewer record." do
+        expect { subject }.to change { Viewer.count }.by 1
+        expect(Viewer.exists?(uuid: "hoge", user_id: user_id)).to be true
+      end
+    end
+
+    context "cookie is missing" do
+      let(:user_id) { 1 }
+
+      it "Creates viewer record." do
+        expect { subject }.to change { Viewer.count }.by 1
+        expect(Viewer.exists?(uuid: nil, user_id: user_id)).to be true
+      end
+    end
+
+    context "user_id is missing" do
+      let(:user_id) { nil }
+
+      before do
+        test_cookie[:viewer_id] = "hoge"
+      end
+
+      it "Creates viewer record." do
+        expect { subject }.to change { Viewer.count }.by 1
+        expect(Viewer.exists?(uuid: "hoge", user_id: nil)).to be true
+      end
+    end
+
+    context "Viewer record already exist" do
+      let(:user_id) { 1 }
+
+      before do
+        test_cookie[:viewer_id] = "hoge"
+        Viewer.create!(uuid: "hoge", user_id: 1)
+      end
+
+      it "Creates viewer record." do
+        expect { subject }.not_to change { Viewer.count }
+      end
+    end
+  end
+
+  after do
+    Viewer.delete_all
   end
 end

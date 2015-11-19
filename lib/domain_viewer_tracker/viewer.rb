@@ -1,3 +1,5 @@
+require "active_record"
+
 # == Schema Information
 #
 # Table name: viewers

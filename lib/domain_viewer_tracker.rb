@@ -1,7 +1,7 @@
 require "domain_viewer_tracker/version"
-require "active_record"
 require "action_dispatch"
 require "domain_viewer_tracker/configurable"
+require "domain_viewer_tracker/viewer"
 
 module DomainViewerTracker
 
