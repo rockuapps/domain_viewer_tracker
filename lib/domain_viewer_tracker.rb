@@ -7,7 +7,7 @@ module DomainViewerTracker
 
     def set_viewer_id
       unless cookies[cookie_key_name]
-        cookies[cookie_key_name] = { value: SecureRandom.uuid, domain: CommonCookieHandler.cookie_domain }
+        cookies[cookie_key_name] = { value: SecureRandom.uuid, domain: cookie_domain }
       end
     end
 
