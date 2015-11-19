@@ -1,2 +1,7 @@
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'domain_viewer_tracker'
+require 'bundler/setup'
+Bundler.require(:default, :development)
+
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+
+RSpec.configure do
+end
