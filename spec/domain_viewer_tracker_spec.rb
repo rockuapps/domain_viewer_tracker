@@ -88,7 +88,12 @@ describe DomainViewerTracker do
 
       it "Creates viewer record." do
         expect { subject }.to change { Viewer.count }.by 1
-        expect(Viewer.exists?(uuid: nil, user_id: user_id)).to be true
+        expect(Viewer.exists?(user_id: user_id)).to be true
+      end
+
+      it "genarates viewer_id" do
+        subject
+        expect(Viewer.find_by(user_id: user_id).uuid).to match /^.{36}$/
       end
     end
 

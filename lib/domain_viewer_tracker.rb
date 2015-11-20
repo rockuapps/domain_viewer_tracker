@@ -8,12 +8,11 @@ module DomainViewerTracker
   private
 
     def set_viewer_id
-      unless cookies[key]
-        cookies.permanent[key] = { value: SecureRandom.uuid, domain: domain }
-      end
+      cookies.permanent[key] ||= { value: SecureRandom.uuid, domain: domain }
     end
 
     def store_viewer_id(user_id)
+      set_viewer_id
       Viewer.find_or_create_by(uuid: cookies[key], user_id: user_id)
     end
 
