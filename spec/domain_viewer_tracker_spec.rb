@@ -13,15 +13,6 @@ describe DomainViewerTracker do
   describe "#set_viewer_id" do
     subject { testModel.send(:set_viewer_id) }
 
-    let(:testModel) do
-      class TestModel
-        include DomainViewerTracker
-      end
-      allow_any_instance_of(TestModel).to receive(:cookies).and_return(test_cookie)
-      TestModel.new
-    end
-    let(:test_cookie) { ActionDispatch::Cookies::CookieJar.new(nil) }
-
     it "should save cookie with uuid" do
       subject
       expect(test_cookie[:viewer_id]).to match /^.{36}$/
@@ -118,7 +109,7 @@ describe DomainViewerTracker do
         Viewer.create!(uuid: "hoge", user_id: 1)
       end
 
-      it "Creates viewer record." do
+      it "does not create viewer record." do
         expect { subject }.not_to change { Viewer.count }
       end
     end
