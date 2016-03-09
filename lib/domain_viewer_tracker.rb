@@ -6,6 +6,9 @@ require "domain_viewer_tracker/viewer"
 module DomainViewerTracker
 
   private
+    def viewer_id
+      cookies[key]
+    end
 
     def set_viewer_id
       cookies.permanent[key] ||= { value: SecureRandom.uuid, domain: domain }
